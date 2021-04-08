@@ -46,6 +46,10 @@ The following should work in a fresh Git clone:
       sudo dnf builddep --spec $TEMPFILE && \
       rm $TEMPFILE
 
+For running the browser unit tests, the following dependencies are required:
+
+    $ sudo dnf chromium-headless dbus-daemon
+
 For running integration tests, the following dependencies are required:
 
     $ sudo dnf install curl expect xz rpm-build chromium-headless \
@@ -244,8 +248,7 @@ In a Fedora/RHEL build environment you can build binary RPMs with
 
 In a Debian/Ubuntu build environment you can build debs with
 
-    cp -r tools/debian .
-    dpkg-buildpackage -us -uc -b
+    tools/make-debs --quick
 
 ## Contributing a change
 

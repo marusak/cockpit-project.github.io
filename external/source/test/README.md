@@ -13,7 +13,7 @@ will handle that.
 
 If test failures are encountered that look like they may be related to problems
 with nested virtualization, refer to
-[this Fedora guide](https://fedoraproject.org/wiki/How_to_enable_nested_virtualization_in_KVM)
+[this Fedora guide](https://docs.fedoraproject.org/en-US/quick-docs/using-nested-virtualization-in-kvm/index.html)
 for more details and recommendations on ensuring it is enabled correctly.
 
 ## Introduction
@@ -26,7 +26,7 @@ expects to find it (do NOT run the build step as root):
 To run the integration tests run the following (do NOT run the integration tests
 as root):
 
-    $ ./test/verify/run-tests
+    $ ./test/common/run-tests
 
 The tests will automatically download the VM images they need, so expect
 that the initial run may take a couple of hours (there are quite a few
@@ -67,7 +67,7 @@ ssh and web.  See the "Helpful tips" section below.
 
 The verify test suite is the main test suite:
 
- * `test/verify/run-tests`: Run all tests
+ * `test/common/run-tests`: Run all tests
  * `test/verify/check-*`: Run the selected tests
 
 ## Test Configuration
@@ -78,19 +78,18 @@ You can set these environment variables to configure the test suite:
                   "centos-8-stream"
                   "debian-stable"
                   "debian-testing"
-                  "fedora-32"
                   "fedora-33"
+                  "fedora-34"
                   "fedora-coreos"
                   "fedora-testing"
-                  "rhel-7-9"
-                  "rhel-8-3"
-                  "rhel-8-3-distropkg"
                   "rhel-8-4"
                   "rhel-8-4-distropkg"
-                  "rhel-atomic"
+                  "rhel-8-5"
+                  "rhel-8-5-distropkg"
+                  "rhel-9-0"
                   "ubuntu-2004"
                   "ubuntu-stable"
-               "fedora-32" is the default (bots/machine/machine_core/constants.py)
+               "fedora-33" is the default (bots/machine/machine_core/constants.py)
 
     TEST_JOBS  How many tests to run in parallel.  The default is 1.
 
@@ -105,6 +104,9 @@ You can set these environment variables to configure the test suite:
 
     TEST_SHOW_BROWSER  Set to run browser interactively. When not specified,
                        browser is run in headless mode.
+
+    TEST_TIMEOUT_FACTOR Scale normal timeouts by given integer. Useful for
+                        slow/busy testbeds or architectures.
 
 ## Test machines and their images
 
@@ -160,13 +162,6 @@ But they don't have a separate "prepare" step/script; instead, the first time
 you run `test/containers/run-tests` you need to use the `-i` option to
 build/install cockpit into the test VM. This needs to be done with a compatible
 `TEST_OS` (usually a recent `fedora-*`).
-
-### Selenium tests
-The third class of integration tests use avocado and selenium to cover
-different browsers.
-
-For more details on how to run and debug these tests see [selenium hacking guide](./selenium/README.md)
-
 
 ## Debugging tests
 
