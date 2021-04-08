@@ -84,7 +84,7 @@ actions with the tests-trigger utility in this directory.
 
 ### Setup
 
-You need a GitHub token in ~/.config/github-token or from
+You need a GitHub token in ~/.config/cockpit-dev/github-token or from
 the [GitHub CLI](https://cli.github.com/) configuration in
 ~/.config/gh/config.yml.  You can create one for your account at
 
@@ -92,6 +92,33 @@ the [GitHub CLI](https://cli.github.com/) configuration in
 
 When generating a new personal access token, the scope only needs to
 encompass `public_repo` (or `repo` if you're accessing a private repo).
+
+If you'd like to download Red Hat-only internal images from S3, you'll
+need to create a key file in `~/.config/cockpit-dev/s3-keys/[domain]`.
+The `[domain]` can be any non-toplevel domain which contains the S3 URL
+in question.  The contents of this file should be a single line
+containing the "access key" and the "secret key" separated by
+whitespace.
+
+For the currently configured mirrors this means that you'd likely have the
+following file:
+
+- `~/.config/cockpit-dev/s3-keys/linodeobjects.com`
+
+For more control, you could also use the following:
+
+- `~/.config/cockpit-dev/s3-keys/cockpit-images.eu-central-1.linodeobjects.com`
+- `~/.config/cockpit-dev/s3-keys/eu-central-1.linodeobjects.com`
+- either of the above, with `us-east` instead of `eu-central`
+
+each file would be a single line which looks like
+
+```
+EEVIDIDFSOQ0ABJ2LGTT    009rKOypIoqO44Q3VQGRyYPfugi84zANHF0pOW9f
+```
+
+The "access key" and "secret key" is unique per-developer and can be
+obtained by talking to Allison.
 
 ### Test contexts
 
@@ -107,7 +134,8 @@ where items have the following meaning:
   bots from this PR would be used instead of master.
 - owner/project: Name of github project (e.g. 'cockpit-project/cockpit'). This part can
   be omitted when testing in the same project and no 'ref' is needed.
-- ref: Reference in the project (usually branch) (e.g. 'rhel-8.2'). Default is 'master'.
+- ref: Reference in the project (usually branch) (e.g. 'rhel-8.2'). Default is
+  the project's primary branch.
 
 For example, context for scenario 'firefox' on 'fedora-testing' is:
 
@@ -117,7 +145,7 @@ If we want to trigger it on 'cockpit-project/cockpit':
 
     fedora-testing/firefox@cockpit-project/cockpit
 
-If we want to also not run it on master branch, but on 'rhel-8-0' branch:
+If we want to also not run it on the primary branch, but on 'rhel-8-0' branch:
 
     fedora-testing/firefox@cockpit-project/cockpit/rhel-8-0
 
@@ -175,7 +203,7 @@ any way you like.
 
 If you are certain about the changes to the images, it is probably a
 good idea to make a dedicated pull request just for the images.  That
-pull request can then hopefully be merged to master faster.  If
+pull request can then hopefully be merged faster.  If
 instead the images are created on the main feature pull request and
 sit there for a long time, they might cause annoying merge conflicts.
 
